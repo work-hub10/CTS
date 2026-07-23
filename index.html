@@ -12,6 +12,294 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
+/* ===== LOGIN SCREEN ===== */
+.login-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top right, #1e3a8a, #0f172a 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+.login-screen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+.login-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 10;
+}
+.login-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.login-logo .logo-badge {
+  background: #ea580c;
+  color: #fff;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.login-logo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.login-logo p {
+  color: #94a3b8;
+  font-size: 13px;
+}
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+.form-group label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 6px;
+}
+.input-wrapper {
+  position: relative;
+}
+.form-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 12px 14px 12px 38px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: rgba(15, 23, 42, 0.8);
+}
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.pwd-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.pwd-toggle:hover {
+  color: #94a3b8;
+}
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.remember-me input {
+  cursor: pointer;
+}
+.forgot-pwd {
+  color: #ea580c;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.forgot-pwd:hover {
+  color: #f97316;
+}
+.btn-login {
+  width: 100%;
+  background: #ea580c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-login:hover {
+  background: #d97706;
+}
+.btn-login:disabled {
+  background: rgba(234, 88, 12, 0.5);
+  cursor: not-allowed;
+}
+.login-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Demo Drawer */
+.demo-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.demo-trigger:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.demo-drawer {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  color: #fff;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.demo-drawer-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #ea580c;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.demo-user-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.demo-user-card:last-child {
+  margin-bottom: 0;
+}
+.demo-user-role {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+.demo-user-info {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+.demo-user-info span {
+  color: #e2e8f0;
+}
+.btn-demo-login {
+  width: 100%;
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  padding: 6px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-demo-login:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+.logout-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #ef4444;
+  cursor: pointer;
+  border-top: 1px solid var(--border);
+  transition: background 0.15s ease;
+  user-select: none;
+}
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -1339,7 +1627,7 @@ const pageTitles = {
 };
 
 // ─── SIDEBAR ──────────────────────
-function Sidebar({ active, onNav, collapsed, onToggle }) {
+function Sidebar({ active, onNav, collapsed, onToggle, user, onLogout }) {
   return (
     <div className={`sidebar${collapsed ? ' collapsed' : ''}`}>
       <div className="sidebar-logo">
@@ -1372,6 +1660,16 @@ function Sidebar({ active, onNav, collapsed, onToggle }) {
           </div>
         ))}
       </div>
+      {user && (
+        <div 
+          className="logout-btn" 
+          onClick={onLogout}
+          title={collapsed ? "Log Out" : ""}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          {!collapsed && <span className="nav-label">Log Out</span>}
+        </div>
+      )}
       <div className="sidebar-footer">
         {collapsed ? 'v1.0' : 'v1.0.0 · Enterprise Edition'}
       </div>
@@ -1380,7 +1678,7 @@ function Sidebar({ active, onNav, collapsed, onToggle }) {
 }
 
 // ─── TOPBAR ──────────────────────
-function TopBar({ page, onNav }) {
+function TopBar({ page, onNav, user }) {
   return (
     <div className="topbar">
       <div className="topbar-left">
@@ -1388,6 +1686,12 @@ function TopBar({ page, onNav }) {
         <span className="topbar-title">{pageTitles[page]}</span>
       </div>
       <div className="topbar-right">
+        {user && (
+          <div style={{ marginRight: '16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a1a', lineHeight: 1.2 }}>{user.name}</span>
+            <span style={{ fontSize: '10px', color: '#ea580c', fontWeight: 600, textTransform: 'uppercase', tracking: '0.5px' }}>{user.role}</span>
+          </div>
+        )}
         <span className="topbar-workspace">ADNOC CP Retrofit — Phase II</span>
         <div 
           className="topbar-avatar" 
@@ -1395,7 +1699,7 @@ function TopBar({ page, onNav }) {
           onClick={() => onNav(page === 'settings' ? 'toggleSettings' : 'settings')}
           title={page === 'settings' ? 'Back to Previous Page' : 'Settings'}
         >
-          AK
+          {user ? user.avatar : 'AK'}
         </div>
       </div>
     </div>
@@ -1646,6 +1950,9 @@ function DrawingExtraction() {
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
   const [actions, setActions] = useState({});
+  
+  const userObj = JSON.parse(localStorage.getItem('reverse_bim_user') || 'null');
+  const isReviewer = userObj && userObj.role === 'Lead Reviewer';
 
   // ─── OCR Upload State ───
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -1703,6 +2010,11 @@ function DrawingExtraction() {
   // ─── File Upload Handler ───
   const handleFileSelect = async (file) => {
     if (!file) return;
+
+    if (isReviewer) {
+      alert('Upload is disabled for the Lead Reviewer role. Please switch to the Proposals Engineer role to upload.');
+      return;
+    }
 
     // Validate file type
     const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
@@ -1790,11 +2102,18 @@ function DrawingExtraction() {
     <div>
       {/* File Upload Dropzone */}
       <div
-        className={`extract-upload-zone${isDragging ? ' dragging' : ''}`}
-        onClick={() => fileInputRef.current?.click()}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        className={`extract-upload-zone${isDragging ? ' dragging' : ''}${isReviewer ? ' disabled' : ''}`}
+        onClick={() => {
+          if (isReviewer) {
+            alert('Upload is disabled for the Lead Reviewer role. Please switch to the Proposals Engineer role to upload.');
+            return;
+          }
+          fileInputRef.current?.click();
+        }}
+        onDragOver={isReviewer ? undefined : handleDragOver}
+        onDragLeave={isReviewer ? undefined : handleDragLeave}
+        onDrop={isReviewer ? undefined : handleDrop}
+        style={isReviewer ? { cursor: 'not-allowed', opacity: 0.6 } : undefined}
       >
         <input
           ref={fileInputRef}
@@ -1808,10 +2127,14 @@ function DrawingExtraction() {
         </div>
         <div>
           <div className="upload-text-main">
-            {uploadedFile ? 'Upload a different drawing' : 'Upload an engineering drawing for AI extraction'}
+            {isReviewer 
+              ? 'Uploads are disabled for Lead Reviewer' 
+              : (uploadedFile ? 'Upload a different drawing' : 'Upload an engineering drawing for AI extraction')}
           </div>
           <div className="upload-text-sub">
-            Drop a PDF, JPG, or PNG file here (up to 20MB) — or click to browse
+            {isReviewer 
+              ? 'Please log in as Proposals Engineer to upload new drawings' 
+              : 'Drop a PDF, JPG, or PNG file here (up to 20MB) — or click to browse'}
           </div>
         </div>
         {uploadedFile && (
@@ -2815,10 +3138,226 @@ function SettingsPage({ enquiries, onAddEnquiry }) {
   );
 }
 
+// ─── LOGIN PAGE ──────────────────────
+function LoginPage({ onLogin }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showDemoDrawer, setShowDemoDrawer] = useState(false);
+
+  const demoUsers = [
+    {
+      role: 'Proposals Engineer',
+      name: 'Sarah Jenkins',
+      username: 'engineer',
+      password: 'password123',
+      desc: 'Full access: Upload drawings & run AI extraction.'
+    },
+    {
+      role: 'Lead Reviewer',
+      name: 'David Chen',
+      username: 'reviewer',
+      password: 'password123',
+      desc: 'Auditing access: Review, accept, and flag extractions.'
+    }
+  ];
+
+  const handleLogin = (e) => {
+    if (e) e.preventDefault();
+    setError('');
+    
+    if (!username || !password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Simulate server response time for "real-life" experience
+    setTimeout(() => {
+      let matchedUser = null;
+      if (username === 'engineer' && password === 'password123') {
+        matchedUser = { username: 'engineer', name: 'Sarah Jenkins', role: 'Proposals Engineer', avatar: 'SJ' };
+      } else if (username === 'reviewer' && password === 'password123') {
+        matchedUser = { username: 'reviewer', name: 'David Chen', role: 'Lead Reviewer', avatar: 'DC' };
+      } else if (username === 'admin' && password === 'password123') {
+        matchedUser = { username: 'admin', name: 'System Admin', role: 'Administrator', avatar: 'SA' };
+      }
+
+      setIsLoading(false);
+
+      if (matchedUser) {
+        if (rememberMe) {
+          localStorage.setItem('reverse_bim_user', JSON.stringify(matchedUser));
+        }
+        onLogin(matchedUser);
+      } else {
+        setError('Invalid username or password.');
+      }
+    }, 1200);
+  };
+
+  const handleDemoLogin = (user) => {
+    setUsername(user.username);
+    setPassword(user.password);
+    setShowDemoDrawer(false);
+    
+    // Auto-submit with slight delay so user sees credentials filled
+    setIsLoading(true);
+    setTimeout(() => {
+      let matchedUser = { 
+        username: user.username, 
+        name: user.name, 
+        role: user.role, 
+        avatar: user.username === 'engineer' ? 'SJ' : 'DC' 
+      };
+      setIsLoading(false);
+      if (rememberMe) {
+        localStorage.setItem('reverse_bim_user', JSON.stringify(matchedUser));
+      }
+      onLogin(matchedUser);
+    }, 800);
+  };
+
+  return (
+    <div className="login-screen">
+      <div className="login-card">
+        <div className="login-logo">
+          <span className="logo-badge">10xDS</span>
+          <h2>Reverse BIM</h2>
+          <p>AI-Powered Engineering Estimation</p>
+        </div>
+
+        {error && (
+          <div className="login-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style={{ marginLeft: '8px' }}>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <div className="input-wrapper">
+              <span className="input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input
+                id="username"
+                type="text"
+                className="form-input"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <div className="input-wrapper">
+              <span className="input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                className="form-input"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="pwd-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={isLoading}
+              >
+                {showPassword ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="form-options">
+            <label className="remember-me">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                disabled={isLoading}
+              />
+              Remember Me
+            </label>
+            <a href="#" className="forgot-pwd" onClick={(e) => { e.preventDefault(); alert("Please contact your administrator to reset password."); }}>
+              Forgot Password?
+            </a>
+          </div>
+
+          <button type="submit" className="btn-login" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'spin 1s linear infinite', marginRight: '8px'}}><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+                Authenticating...
+              </>
+            ) : (
+              'Sign In'
+            )}
+          </button>
+        </form>
+      </div>
+
+      <button className="demo-trigger" onClick={() => setShowDemoDrawer(!showDemoDrawer)}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span style={{ marginLeft: '6px' }}>Demo Accounts</span>
+      </button>
+
+      {showDemoDrawer && (
+        <div className="demo-drawer">
+          <div className="demo-drawer-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}><polygon points="12 2 15 8 21 12 15 16 12 22 9 16 3 12 9 8 12 2"/></svg>
+            Select Demo Account
+          </div>
+          {demoUsers.map((user, idx) => (
+            <div key={idx} className="demo-user-card">
+              <div className="demo-user-role">{user.role}</div>
+              <div className="demo-user-info">
+                User: <span>{user.username}</span> | Pass: <span>{user.password}</span>
+              </div>
+              <div style={{fontSize: '11px', color: '#64748b', marginBottom: '8px', lineHeight: 1.3}}>
+                {user.desc}
+              </div>
+              <button 
+                className="btn-demo-login" 
+                onClick={() => handleDemoLogin(user)}
+                disabled={isLoading}
+              >
+                Auto-Fill & Sign In
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════
 // APP ROOT
 // ═══════════════════════════════════════
 function App() {
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('reverse_bim_user');
+    return saved ? JSON.parse(saved) : null;
+  });
   const [activePage, setActivePage] = useState('rfq');
   const [prevPage, setPrevPage] = useState('rfq');
   const [fadeClass, setFadeClass] = useState('fade-active');
@@ -2864,6 +3403,10 @@ function App() {
     }
   };
 
+  if (!currentUser) {
+    return <LoginPage onLogin={setCurrentUser} />;
+  }
+
   return (
     <>
       <Sidebar 
@@ -2871,11 +3414,17 @@ function App() {
         onNav={handleNav} 
         collapsed={sidebarCollapsed} 
         onToggle={toggleSidebar} 
+        user={currentUser}
+        onLogout={() => {
+          localStorage.removeItem('reverse_bim_user');
+          setCurrentUser(null);
+        }}
       />
       <div className={`main-area${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         <TopBar 
           page={activePage} 
           onNav={handleNav} 
+          user={currentUser}
         />
         <div className={`content ${fadeClass}`}>
           {renderPage()}
