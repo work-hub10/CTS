@@ -300,6 +300,233 @@
   background: rgba(239, 68, 68, 0.08);
 }
 
+/* ===== TENDER INBOX ===== */
+.inbox-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+.inbox-list {
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: #F9FAFB;
+}
+.inbox-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 15px;
+  background: #fff;
+}
+.inbox-items {
+  overflow-y: auto;
+  flex: 1;
+}
+.inbox-item {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+}
+.inbox-item:hover {
+  background: #F3F4F6;
+}
+.inbox-item.active {
+  background: #EFF6FF;
+  border-left: 4px solid var(--primary);
+}
+.inbox-item-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.inbox-item-sender {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+.inbox-item-date {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.inbox-item-subject {
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--primary);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.inbox-item-preview {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.inbox-item-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.inbox-item-badge.imported {
+  background: var(--success);
+}
+.inbox-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto;
+}
+.inbox-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  gap: 12px;
+}
+.inbox-detail-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.inbox-detail-subject {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.inbox-detail-profiles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inbox-sender-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.inbox-sender-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--primary);
+}
+.inbox-sender-name {
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.inbox-sender-email {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+.inbox-detail-body {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+  border-bottom: 1px solid var(--border);
+}
+.inbox-detail-attachments {
+  padding: 20px 24px;
+  background: #F9FAFB;
+}
+.attachments-title {
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.attachments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.attachment-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.attachment-card .file-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.btn-ingest-tender {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ingest-tender:hover {
+  background: #d97706;
+}
+.btn-ingest-tender:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+.success-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #059669;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13.5px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideUp 0.3s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translate(-50%, 100px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -1591,6 +1818,7 @@ const Icons = {
   menu: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
   upload: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
   inbox: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>,
+  mail: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
   layers: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
   share2: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>,
   calculator: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="8" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/></svg>,
@@ -1608,6 +1836,7 @@ const Icons = {
 
 // ─── NAV CONFIG ──────────────────────
 const navItems = [
+  { id: 'inbox', label: 'Tender Inbox', icon: Icons.mail },
   { id: 'rfq', label: 'RFQ Ingestion', icon: Icons.inbox },
   { id: 'drawing', label: 'Drawing Extraction', icon: Icons.layers },
   { id: 'explorer', label: 'Object Explorer', icon: Icons.share2 },
@@ -1617,6 +1846,7 @@ const navItems = [
 ];
 
 const pageTitles = {
+  inbox: 'Tender Ingest Queue',
   rfq: 'RFQ Ingestion',
   drawing: 'Drawing Extraction',
   explorer: 'Object Explorer — Knowledge Graph',
@@ -1764,6 +1994,244 @@ const initialEnquiries = [
     ]
   }
 ];
+
+// ─── TENDER INBOX SCREEN ──────────────────────
+function TenderInbox({ enquiries, onAddEnquiryWithFiles, onNav }) {
+  const [activeEmailId, setActiveEmailId] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [emails, setEmails] = useState([
+    {
+      id: 1,
+      sender: 'KOC Procurement',
+      email: 'tenders@koc.com.kw',
+      date: 'Today, 10:42 AM',
+      subject: 'TENDER INVITATION: Phase IV Pipeline Ingestion — KOC North Field',
+      preview: 'Dear partners, you are hereby invited to bid for the KOC Pipeline Ingestion...',
+      body: `Dear Bidders,\n\nKuwait Oil Company (KOC) is inviting registered contractors to submit technical and commercial proposals for the Phase IV Pipeline Ingestion & Retrofit at the KOC North Field.\n\nPlease find the detailed General Arrangement Drawings, BOQ template, and Technical Specifications attached to this invitation.\n\nAll clarification queries must be submitted by August 5, 2026. Final bids must be uploaded to our vendor portal by August 15, 2026.\n\nBest regards,\nKOC Procurement Team`,
+      status: 'Pending',
+      projectName: 'KOC North Pipeline',
+      attachments: [
+        { name: 'KOC_Pipeline_Layout.dwg', type: 'dwg', sizeBytes: 6710886, sizeStr: '6.4 MB', status: 'Classified' },
+        { name: 'BOQ_Template_KOC.xlsx', type: 'xlsx', sizeBytes: 1258291, sizeStr: '1.2 MB', status: 'Classified' },
+        { name: 'Technical_Spec_KOC.pdf', type: 'pdf', sizeBytes: 4404019, sizeStr: '4.2 MB', status: 'Classified' }
+      ]
+    },
+    {
+      id: 2,
+      sender: 'PDO Oman Contracts',
+      email: 'contracts@pdo.co.om',
+      date: 'Yesterday, 2:15 PM',
+      subject: 'RFQ: PDO Oman Tank Farm Expansion',
+      preview: 'Dear Team, kindly review the attached drawings and BOQ template for PDO...',
+      body: `Dear Team,\n\nKindly review the attached technical drawings, specifications, and BOQ template for the Petroleum Development Oman (PDO) Tank Farm Expansion.\n\nPlease submit your commercial proposal by next Friday.\n\nRegards,\nPDO Contracts Department`,
+      status: 'Pending',
+      projectName: 'PDO Oman Tank Farm',
+      attachments: [
+        { name: 'PDO_Tank_Farm_Layout.dwg', type: 'dwg', sizeBytes: 5976883, sizeStr: '5.7 MB', status: 'Classified' },
+        { name: 'BOQ_Template_PDO.xlsx', type: 'xlsx', sizeBytes: 1887436, sizeStr: '1.8 MB', status: 'Classified' },
+        { name: 'PDO_Specs_General.pdf', type: 'pdf', sizeBytes: 6396313, sizeStr: '6.1 MB', status: 'Classified' }
+      ]
+    },
+    {
+      id: 3,
+      sender: 'Saudi Aramco Procurement',
+      email: 'procurement@aramco.com',
+      date: 'Today, 8:15 AM',
+      subject: 'TENDER INVITATION: Aramco Gas Plant Extension — Haradh',
+      projectName: 'Aramco Haradh Expansion',
+      preview: 'Dear registered suppliers, you are invited to submit bids for the Haradh Gas Plant...',
+      body: `Dear Partners,\n\nSaudi Aramco invites bids for the piping fabrication, mechanical installation, and site construction for the Haradh Gas Plant Extension (Package 3).\n\nPlease download the technical specifications, P&ID layouts, and cost worksheets attached to this email.\n\nClarification bids close on August 10, 2026. Submit your final proposal via the Aramco E-Marketplace by August 20, 2026.\n\nRegards,\nSaudi Aramco Contracting Team`,
+      status: 'Pending',
+      attachments: [
+        { name: 'Haradh_Extension_GA.dwg', type: 'dwg', sizeBytes: 8598323, sizeStr: '8.2 MB', status: 'Classified' },
+        { name: 'Aramco_BOQ_Template.xlsx', type: 'xlsx', sizeBytes: 2202009, sizeStr: '2.1 MB', status: 'Classified' },
+        { name: 'Technical_Specs_Aramco.pdf', type: 'pdf', sizeBytes: 5662310, sizeStr: '5.4 MB', status: 'Classified' },
+        { name: 'Aramco_Scope_of_Work.docx', type: 'docx', sizeBytes: 1153433, sizeStr: '1.1 MB', status: 'Classified' }
+      ]
+    },
+    {
+      id: 4,
+      sender: 'DEWA Procurement',
+      email: 'tenders@dewa.gov.ae',
+      date: 'Yesterday, 11:30 AM',
+      subject: 'RFQ: DEWA Solar Park Substation Civil Works',
+      projectName: 'DEWA Solar Substation',
+      preview: 'DEWA invites proposals for civil works, structural layouts, and electrical integration...',
+      body: `Dear Sir/Madam,\n\nThe Dubai Electricity and Water Authority (DEWA) invites bids for the construction of the civil foundation and substation housing at the Mohammed bin Rashid Al Maktoum Solar Park (Phase V).\n\nAttached are the foundation specifications, civil drawings, and standard BOQ tables.\n\nBids must be uploaded to the DEWA Supplier Portal by August 18, 2026.\n\nSincerely,\nDEWA Purchasing Department`,
+      status: 'Pending',
+      attachments: [
+        { name: 'Substation_Foundation_Layout.dwg', type: 'dwg', sizeBytes: 5033164, sizeStr: '4.8 MB', status: 'Classified' },
+        { name: 'DEWA_BOQ_Civil.xlsx', type: 'xlsx', sizeBytes: 1468006, sizeStr: '1.4 MB', status: 'Classified' },
+        { name: 'Civil_Specs_DEWA.pdf', type: 'pdf', sizeBytes: 3355443, sizeStr: '3.2 MB', status: 'Classified' }
+      ]
+    },
+    {
+      id: 5,
+      sender: 'QatarEnergy Tenders',
+      email: 'procurement@qatarenergy.qa',
+      date: '2 days ago',
+      subject: 'RFQ: QatarEnergy NFE Storage Tanks Upgrades',
+      projectName: 'QatarEnergy NFE Tanks',
+      preview: 'QatarEnergy invites bids for the upgrade and retrofitting of storage tanks...',
+      body: `Dear Bidder,\n\nQatarEnergy invites proposals for the retrofitting and capacity upgrade of the condensate storage tanks at the North Field East (NFE) facility.\n\nDetails of nozzle relocations, coating specifications, and structural reinforcement are attached.\n\nCommercial proposals must be submitted through the QatarEnergy e-Sourcing portal by August 22, 2026.\n\nBest regards,\nQatarEnergy Contracts Committee`,
+      status: 'Pending',
+      attachments: [
+        { name: 'NFE_Tanks_Retrofit.dwg', type: 'dwg', sizeBytes: 7444889, sizeStr: '7.1 MB', status: 'Classified' },
+        { name: 'QE_BOQ_Condensate.xlsx', type: 'xlsx', sizeBytes: 1677721, sizeStr: '1.6 MB', status: 'Classified' },
+        { name: 'Tanks_Specs_QatarEnergy.pdf', type: 'pdf', sizeBytes: 5138022, sizeStr: '4.9 MB', status: 'Classified' }
+      ]
+    },
+    {
+      id: 6,
+      sender: 'Oman LNG Procurement',
+      email: 'tenders@omanlng.co.om',
+      date: '3 days ago',
+      subject: 'TENDER INVITATION: Oman LNG Jetty Firewater Piping',
+      projectName: 'Oman LNG Jetty Piping',
+      preview: 'Oman LNG invites qualified bidders for the replacement of the jetty firewater piping system...',
+      body: `Dear Sirs,\n\nOman LNG is issuing this tender for the replacement of firewater utility piping along the Sur LNG Export Jetty.\n\nDrawings, pressure ratings, and execution schedules are attached for your pricing.\n\nSubmit your final commercial estimate by August 25, 2026.\n\nBest regards,\nOman LNG Procurement Team`,
+      status: 'Pending',
+      attachments: [
+        { name: 'Jetty_Firewater_Piping.dwg', type: 'dwg', sizeBytes: 5452595, sizeStr: '5.2 MB', status: 'Classified' },
+        { name: 'Oman_LNG_BOQ_Jetty.xlsx', type: 'xlsx', sizeBytes: 1153433, sizeStr: '1.1 MB', status: 'Classified' },
+        { name: 'Jetty_Piping_Specs.pdf', type: 'pdf', sizeBytes: 3984588, sizeStr: '3.8 MB', status: 'Classified' }
+      ]
+    }
+  ]);
+
+  const activeEmail = emails.find(e => e.id === activeEmailId);
+
+  const handleIngest = () => {
+    if (!activeEmail || activeEmail.status === 'Imported') return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      // Add the new project to global enquiries state
+      onAddEnquiryWithFiles(activeEmail.projectName, activeEmail.attachments);
+
+      // Update local email status
+      setEmails(prev => prev.map(e => e.id === activeEmail.id ? { ...e, status: 'Imported' } : e));
+      setIsLoading(false);
+      setShowToast(true);
+
+      // Hide toast after 2 seconds and nav to RFQ Ingestion
+      setTimeout(() => {
+        setShowToast(false);
+        onNav('rfq');
+      }, 2000);
+    }, 1500);
+  };
+
+  return (
+    <div className="inbox-container">
+      {/* Left List of Emails */}
+      <div className="inbox-list">
+        <div className="inbox-header">Tender Inbox Queue</div>
+        <div className="inbox-items">
+          {emails.map(email => (
+            <div 
+              key={email.id} 
+              className={`inbox-item${activeEmailId === email.id ? ' active' : ''}`}
+              onClick={() => setActiveEmailId(email.id)}
+            >
+              <div className="inbox-item-meta">
+                <span className="inbox-item-sender">{email.sender}</span>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <span className="inbox-item-date">{email.date}</span>
+                  <span className={`inbox-item-badge ${email.status === 'Imported' ? 'imported' : ''}`}>
+                    {email.status}
+                  </span>
+                </div>
+              </div>
+              <div className="inbox-item-subject">{email.subject}</div>
+              <div className="inbox-item-preview">{email.preview}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Email Detail */}
+      <div className="inbox-detail">
+        {activeEmail ? (
+          <>
+            <div className="inbox-detail-header">
+              <div className="inbox-detail-subject">{activeEmail.subject}</div>
+              <div className="inbox-detail-profiles">
+                <div className="inbox-sender-info">
+                  <div className="inbox-sender-avatar">
+                    {activeEmail.sender.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <div>
+                    <div className="inbox-sender-name">{activeEmail.sender}</div>
+                    <div className="inbox-sender-email">From: {activeEmail.email}</div>
+                  </div>
+                </div>
+                <div>
+                  <button 
+                    className="btn-ingest-tender"
+                    onClick={handleIngest}
+                    disabled={activeEmail.status === 'Imported' || isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" style={{animation: 'spin 1s linear infinite', marginRight: '6px'}}><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+                        Classifying & Importing...
+                      </>
+                    ) : activeEmail.status === 'Imported' ? (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Imported to RFQ
+                      </>
+                    ) : (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        Approve & Ingest to RFQ
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="inbox-detail-body">
+              {activeEmail.body.split('\n').map((para, i) => (
+                <p key={i} style={{marginBottom: '16px'}}>{para}</p>
+              ))}
+            </div>
+
+            <div className="inbox-detail-attachments">
+              <div className="attachments-title">Tender Attachments ({activeEmail.attachments.length} files)</div>
+              <div className="attachments-grid">
+                {activeEmail.attachments.map((att, idx) => (
+                  <div key={idx} className="attachment-card">
+                    <div className={`file-icon file-${att.type}`} style={{width: '28px', height: '28px', fontSize: '9px'}}>{att.type}</div>
+                    <div style={{flex: 1, minWidth: 0}}>
+                      <div style={{fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}} title={att.name}>{att.name}</div>
+                      <div style={{fontSize: '10px', color: 'var(--text-secondary)'}}>{att.sizeStr}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="inbox-detail-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Select an email to review the invitation to tender.
+          </div>
+        )}
+
+        {showToast && (
+          <div className="success-toast">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Tender successfully approved and imported to RFQ Ingestion!
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
   const activeEnquiry = selectedEnquiry || (enquiries.length > 0 ? enquiries[0].name : '');
@@ -3385,8 +3853,8 @@ function App() {
     const saved = localStorage.getItem('reverse_bim_user');
     return saved ? JSON.parse(saved) : null;
   });
-  const [activePage, setActivePage] = useState('rfq');
-  const [prevPage, setPrevPage] = useState('rfq');
+  const [activePage, setActivePage] = useState('inbox');
+  const [prevPage, setPrevPage] = useState('inbox');
   const [fadeClass, setFadeClass] = useState('fade-active');
   const [enquiries, setEnquiries] = useState(initialEnquiries);
   const [selectedEnquiry, setSelectedEnquiry] = useState(initialEnquiries.length > 0 ? initialEnquiries[0].name : '');
@@ -3401,10 +3869,20 @@ function App() {
     setSelectedEnquiry(name);
   };
 
+  const handleAddEnquiryWithFiles = (name, files) => {
+    setEnquiries(prev => {
+      const exists = prev.some(e => e.name.toLowerCase() === name.toLowerCase());
+      if (exists) {
+        return prev.map(e => e.name.toLowerCase() === name.toLowerCase() ? { ...e, files: [...e.files, ...files] } : e);
+      }
+      return [...prev, { name, files }];
+    });
+  };
+
   const handleNav = (id) => {
     let target = id;
     if (id === 'toggleSettings') {
-      target = activePage === 'settings' ? (prevPage || 'rfq') : 'settings';
+      target = activePage === 'settings' ? (prevPage || 'inbox') : 'settings';
     }
     if (target === activePage) return;
 
@@ -3421,6 +3899,7 @@ function App() {
 
   const renderPage = () => {
     switch (activePage) {
+      case 'inbox': return <TenderInbox enquiries={enquiries} onAddEnquiryWithFiles={handleAddEnquiryWithFiles} onNav={handleNav} />;
       case 'rfq': return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
       case 'drawing': return <DrawingExtraction />;
       case 'explorer': return <ObjectExplorer enquiries={enquiries} />;
@@ -3428,7 +3907,7 @@ function App() {
       case 'revision': return <RevisionImpact />;
       case 'dashboard': return <Dashboard />;
       case 'settings': return <SettingsPage enquiries={enquiries} onAddEnquiry={handleAddEnquiry} />;
-      default: return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
+      default: return <TenderInbox enquiries={enquiries} onAddEnquiryWithFiles={handleAddEnquiryWithFiles} onNav={handleNav} />;
     }
   };
 
