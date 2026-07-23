@@ -900,22 +900,55 @@ function Sidebar({ active, onNav }) {
 }
 
 // ─── TOPBAR ──────────────────────
-function TopBar({ page, onNav }) {
+function TopBar({ page, onNav, user, enquiries = [], selectedEnquiry = '', onSelectEnquiry }) {
+  const sortedEnquiries = [...enquiries].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="topbar">
       <div className="topbar-left">
         <span className="topbar-breadcrumb">Reverse BIM <span>/ </span></span>
         <span className="topbar-title">{pageTitles[page]}</span>
       </div>
+      <div className="topbar-center" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+        {sortedEnquiries.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '4px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Enquiry:
+            </span>
+            <select 
+              value={selectedEnquiry} 
+              onChange={(e) => onSelectEnquiry && onSelectEnquiry(e.target.value)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                color: '#0F172A',
+                fontFamily: 'inherit',
+                outline: 'none',
+                cursor: 'pointer',
+                paddingRight: '4px'
+              }}
+            >
+              {sortedEnquiries.map(e => <option key={e.name} value={e.name}>{e.name}</option>)}
+            </select>
+          </div>
+        )}
+      </div>
       <div className="topbar-right">
-        <span className="topbar-workspace">ADNOC CP Retrofit — Phase II</span>
+        {user && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a1a', lineHeight: 1.2 }}>{user.name}</span>
+            <span style={{ fontSize: '10px', color: '#ea580c', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{user.role}</span>
+          </div>
+        )}
         <div 
           className="topbar-avatar" 
           style={{cursor: 'pointer'}} 
           onClick={() => onNav(page === 'settings' ? 'toggleSettings' : 'settings')}
           title={page === 'settings' ? 'Back to Previous Page' : 'Settings'}
         >
-          AK
+          {user ? user.avatar : 'AK'}
         </div>
       </div>
     </div>
@@ -1993,14 +2026,14 @@ function App() {
 
   const renderPage = () => {
     switch (activePage) {
-      case 'rfq': return <RFQIngestion enquiries={enquiries} />;
+      case 'rfq': return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
       case 'drawing': return <DrawingExtraction />;
       case 'explorer': return <ObjectExplorer enquiries={enquiries} />;
       case 'estimator': return <EstimatorWorkbench />;
       case 'revision': return <RevisionImpact />;
       case 'dashboard': return <Dashboard />;
       case 'settings': return <SettingsPage enquiries={enquiries} onAddEnquiry={handleAddEnquiry} />;
-      default: return <RFQIngestion enquiries={enquiries} />;
+      default: return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
     }
   };
 
@@ -2008,7 +2041,13 @@ function App() {
     <>
       <Sidebar active={activePage} onNav={handleNav} />
       <div className="main-area">
-        <TopBar page={activePage} onNav={handleNav} />
+        <TopBar 
+          page={activePage} 
+          onNav={handleNav} 
+          enquiries={enquiries}
+          selectedEnquiry={selectedEnquiry}
+          onSelectEnquiry={setSelectedEnquiry}
+        />
         <div className={`content ${fadeClass}`}>
           {renderPage()}
         </div>

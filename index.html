@@ -1678,21 +1678,48 @@ function Sidebar({ active, onNav, collapsed, onToggle, user, onLogout }) {
 }
 
 // ─── TOPBAR ──────────────────────
-function TopBar({ page, onNav, user }) {
+function TopBar({ page, onNav, user, enquiries = [], selectedEnquiry = '', onSelectEnquiry }) {
+  const sortedEnquiries = [...enquiries].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="topbar">
       <div className="topbar-left">
         <span className="topbar-breadcrumb">Reverse BIM <span>/ </span></span>
         <span className="topbar-title">{pageTitles[page]}</span>
       </div>
-      <div className="topbar-right">
-        {user && (
-          <div style={{ marginRight: '16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a1a', lineHeight: 1.2 }}>{user.name}</span>
-            <span style={{ fontSize: '10px', color: '#ea580c', fontWeight: 600, textTransform: 'uppercase', tracking: '0.5px' }}>{user.role}</span>
+      <div className="topbar-center" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+        {sortedEnquiries.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '4px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Enquiry:
+            </span>
+            <select 
+              value={selectedEnquiry} 
+              onChange={(e) => onSelectEnquiry && onSelectEnquiry(e.target.value)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                color: '#0F172A',
+                fontFamily: 'inherit',
+                outline: 'none',
+                cursor: 'pointer',
+                paddingRight: '4px'
+              }}
+            >
+              {sortedEnquiries.map(e => <option key={e.name} value={e.name}>{e.name}</option>)}
+            </select>
           </div>
         )}
-        <span className="topbar-workspace">ADNOC CP Retrofit — Phase II</span>
+      </div>
+      <div className="topbar-right">
+        {user && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a1a', lineHeight: 1.2 }}>{user.name}</span>
+            <span style={{ fontSize: '10px', color: '#ea580c', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{user.role}</span>
+          </div>
+        )}
         <div 
           className="topbar-avatar" 
           style={{cursor: 'pointer'}} 
@@ -1738,8 +1765,8 @@ const initialEnquiries = [
   }
 ];
 
-function RFQIngestion({ enquiries }) {
-  const [selectedEnquiry, setSelectedEnquiry] = useState(enquiries.length > 0 ? enquiries[0].name : '');
+function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
+  const activeEnquiry = selectedEnquiry || (enquiries.length > 0 ? enquiries[0].name : '');
   const [sortBySize, setSortBySize] = useState({});
 
   const statusBadge = (s) => {
@@ -1770,8 +1797,8 @@ function RFQIngestion({ enquiries }) {
         <div style={{display: 'flex', alignItems: 'center', gap: '12px', width: '100%', maxWidth: '400px'}}>
           <label style={{fontWeight: 600, fontSize: '14px', whiteSpace: 'nowrap'}}>Select Enquiry:</label>
           <select 
-            value={selectedEnquiry} 
-            onChange={(e) => setSelectedEnquiry(e.target.value)}
+            value={activeEnquiry} 
+            onChange={(e) => setSelectedEnquiry && setSelectedEnquiry(e.target.value)}
             style={{flex: 1, padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '14px', fontFamily: 'inherit', outline: 'none'}}
           >
             {sortedEnquiries.map(e => <option key={e.name} value={e.name}>{e.name}</option>)}
@@ -1780,7 +1807,7 @@ function RFQIngestion({ enquiries }) {
         <div className="dropzone" style={{width: '100%', border: 'none', background: 'transparent', padding: '16px 0 0', cursor: 'pointer'}}>
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{margin: '0 auto 12px'}}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <div className="dropzone-title">Drop RFQ files or click to browse</div>
-          <div className="dropzone-sub" style={{marginTop: 4}}>Uploading to: <span style={{fontWeight: 600, color: 'var(--primary)'}}>{selectedEnquiry}</span></div>
+          <div className="dropzone-sub" style={{marginTop: 4}}>Uploading to: <span style={{fontWeight: 600, color: 'var(--primary)'}}>{activeEnquiry}</span></div>
           <div className="dropzone-sub" style={{marginTop: 4}}>PDF, XLSX, DOCX, DWG — up to 50 MB per file</div>
         </div>
       </div>
@@ -3362,6 +3389,7 @@ function App() {
   const [prevPage, setPrevPage] = useState('rfq');
   const [fadeClass, setFadeClass] = useState('fade-active');
   const [enquiries, setEnquiries] = useState(initialEnquiries);
+  const [selectedEnquiry, setSelectedEnquiry] = useState(initialEnquiries.length > 0 ? initialEnquiries[0].name : '');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -3370,6 +3398,7 @@ function App() {
 
   const handleAddEnquiry = (name) => {
     setEnquiries([...enquiries, { name, files: [] }]);
+    setSelectedEnquiry(name);
   };
 
   const handleNav = (id) => {
@@ -3392,14 +3421,14 @@ function App() {
 
   const renderPage = () => {
     switch (activePage) {
-      case 'rfq': return <RFQIngestion enquiries={enquiries} />;
+      case 'rfq': return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
       case 'drawing': return <DrawingExtraction />;
       case 'explorer': return <ObjectExplorer enquiries={enquiries} />;
       case 'estimator': return <EstimatorWorkbench />;
       case 'revision': return <RevisionImpact />;
       case 'dashboard': return <Dashboard />;
       case 'settings': return <SettingsPage enquiries={enquiries} onAddEnquiry={handleAddEnquiry} />;
-      default: return <RFQIngestion enquiries={enquiries} />;
+      default: return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
     }
   };
 
@@ -3425,6 +3454,9 @@ function App() {
           page={activePage} 
           onNav={handleNav} 
           user={currentUser}
+          enquiries={enquiries}
+          selectedEnquiry={selectedEnquiry}
+          onSelectEnquiry={setSelectedEnquiry}
         />
         <div className={`content ${fadeClass}`}>
           {renderPage()}
