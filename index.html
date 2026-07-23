@@ -2236,6 +2236,7 @@ function TenderInbox({ enquiries, onAddEnquiryWithFiles, onNav }) {
 function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
   const activeEnquiry = selectedEnquiry || (enquiries.length > 0 ? enquiries[0].name : '');
   const [sortBySize, setSortBySize] = useState({});
+  const [collapsedProjects, setCollapsedProjects] = useState({});
 
   const statusBadge = (s) => {
     if (s === 'Classified') return <span className="badge badge-success">{Icons.check} {s}</span>;
@@ -2253,6 +2254,13 @@ function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
     });
   };
 
+  const toggleCollapse = (projectName) => {
+    setCollapsedProjects(prev => ({
+      ...prev,
+      [projectName]: !prev[projectName]
+    }));
+  };
+
   const sortedEnquiries = [...enquiries].sort((a, b) => a.name.localeCompare(b.name));
 
   const allFiles = enquiries.flatMap(e => e.files);
@@ -2262,17 +2270,7 @@ function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
   return (
     <div>
       <div className="card mb-24" style={{padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', borderStyle: 'dashed', borderWidth: '2px', borderColor: 'var(--border)', background: '#FAFAFA'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '12px', width: '100%', maxWidth: '400px'}}>
-          <label style={{fontWeight: 600, fontSize: '14px', whiteSpace: 'nowrap'}}>Select Enquiry:</label>
-          <select 
-            value={activeEnquiry} 
-            onChange={(e) => setSelectedEnquiry && setSelectedEnquiry(e.target.value)}
-            style={{flex: 1, padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '14px', fontFamily: 'inherit', outline: 'none'}}
-          >
-            {sortedEnquiries.map(e => <option key={e.name} value={e.name}>{e.name}</option>)}
-          </select>
-        </div>
-        <div className="dropzone" style={{width: '100%', border: 'none', background: 'transparent', padding: '16px 0 0', cursor: 'pointer'}}>
+        <div className="dropzone" style={{width: '100%', border: 'none', background: 'transparent', padding: '0', cursor: 'pointer'}}>
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{margin: '0 auto 12px'}}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <div className="dropzone-title">Drop RFQ files or click to browse</div>
           <div className="dropzone-sub" style={{marginTop: 4}}>Uploading to: <span style={{fontWeight: 600, color: 'var(--primary)'}}>{activeEnquiry}</span></div>
@@ -2291,45 +2289,87 @@ function RFQIngestion({ enquiries, selectedEnquiry, setSelectedEnquiry }) {
               files.sort((a, b) => b.sizeBytes - a.sizeBytes);
             }
 
+            const isCollapsed = collapsedProjects[enq.name] ?? (enq.name !== activeEnquiry);
+
             return (
-              <div key={enq.name} className="card" style={{padding: 0}}>
-                <div style={{padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', background: '#F9FAFB'}}>
-                  <div style={{fontWeight: 600, fontSize: '15px'}}>{enq.name} <span className="badge badge-info" style={{marginLeft: 8}}>{enq.files.length} files</span></div>
+              <div key={enq.name} className="card" style={{padding: 0, overflow: 'hidden'}}>
+                <div 
+                  onClick={() => toggleCollapse(enq.name)}
+                  style={{
+                    padding: '16px 24px', 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center', 
+                    background: isCollapsed ? '#FFFFFF' : '#F9FAFB', 
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    borderBottom: isCollapsed ? 'none' : '1px solid var(--border)',
+                    transition: 'background 0.2s ease'
+                  }}
+                >
+                  <div style={{fontWeight: 600, fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    {enq.name} 
+                    <span className="badge badge-info">{enq.files.length} files</span>
+                    {enq.name === activeEnquiry && (
+                      <span className="badge badge-success" style={{fontSize: '10px', padding: '2px 6px'}}>Active</span>
+                    )}
+                  </div>
+                  <div style={{color: 'var(--text-secondary)', display: 'flex', alignItems: 'center'}}>
+                    <svg 
+                      width="16" 
+                      height="16" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      style={{
+                        transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)', 
+                        transition: 'transform 0.2s ease'
+                      }}
+                    >
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                  </div>
                 </div>
-                <div className="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th style={{paddingLeft: 24}}>Filename</th>
-                        <th>Type</th>
-                        <th style={{cursor: 'pointer', userSelect: 'none', color: sortOrder ? 'var(--primary)' : 'var(--text-secondary)'}} onClick={() => toggleSort(enq.name)}>
-                          Size {sortOrder === 'desc' ? '↓' : sortOrder === 'asc' ? '↑' : '↕'}
-                        </th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {files.map((f, i) => (
-                        <tr key={i}>
-                          <td style={{paddingLeft: 24}}>
-                            <div style={{display:'flex', alignItems:'center', gap: 10}}>
-                              <div className={`file-icon file-${f.type}`}>{f.type}</div>
-                              <span style={{fontWeight: 500}}>{f.name}</span>
-                            </div>
-                          </td>
-                          <td style={{color: 'var(--text-secondary)', fontSize: 12, textTransform: 'uppercase'}}>{f.type}</td>
-                          <td style={{color: 'var(--text-secondary)'}}>{f.sizeStr}</td>
-                          <td>{statusBadge(f.status)}</td>
-                        </tr>
-                      ))}
-                      {files.length === 0 && (
+                
+                {!isCollapsed && (
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
                         <tr>
-                          <td colSpan="4" style={{textAlign: 'center', padding: '24px', color: 'var(--text-secondary)'}}>No files in this enquiry.</td>
+                          <th style={{paddingLeft: 24}}>Filename</th>
+                          <th>Type</th>
+                          <th style={{cursor: 'pointer', userSelect: 'none', color: sortOrder ? 'var(--primary)' : 'var(--text-secondary)'}} onClick={(e) => { e.stopPropagation(); toggleSort(enq.name); }}>
+                            Size {sortOrder === 'desc' ? '↓' : sortOrder === 'asc' ? '↑' : '↕'}
+                          </th>
+                          <th>Status</th>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {files.map((f, i) => (
+                          <tr key={i}>
+                            <td style={{paddingLeft: 24}}>
+                              <div style={{display:'flex', alignItems:'center', gap: 10}}>
+                                <div className={`file-icon file-${f.type}`}>{f.type}</div>
+                                <span style={{fontWeight: 500}}>{f.name}</span>
+                              </div>
+                            </td>
+                            <td style={{color: 'var(--text-secondary)', fontSize: 12, textTransform: 'uppercase'}}>{f.type}</td>
+                            <td style={{color: 'var(--text-secondary)'}}>{f.sizeStr}</td>
+                            <td>{statusBadge(f.status)}</td>
+                          </tr>
+                        ))}
+                        {files.length === 0 && (
+                          <tr>
+                            <td colSpan="4" style={{textAlign: 'center', padding: '24px', color: 'var(--text-secondary)'}}>No files in this enquiry.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -2440,7 +2480,7 @@ function DrawingWithAnnotations({ highlightedId, showAnnotations, onObjectClick,
   );
 }
 
-function DrawingExtraction() {
+function DrawingExtraction({ selectedEnquiry }) {
   const [highlightedId, setHighlightedId] = useState(null);
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
@@ -2657,7 +2697,7 @@ function DrawingExtraction() {
       <div className="extraction-stepper">
         <div className="ext-steps-container">
           <div style={{fontSize: 12, fontWeight: 600, color: 'var(--text)', marginRight: 20, whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.4px'}}>
-            Extraction Pipeline
+            Extraction Pipeline {selectedEnquiry && `— ${selectedEnquiry}`}
           </div>
           {extractionSteps.map((step, i) => (
             <React.Fragment key={i}>
@@ -2977,18 +3017,11 @@ const pregeneratedPrompts = [
   }
 ];
 
-function ObjectExplorer({ enquiries }) {
+function ObjectExplorer({ enquiries, selectedEnquiry }) {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [hoveredEdge, setHoveredEdge] = useState(null);
-  const [selectedEnquiry, setSelectedEnquiry] = useState(enquiries.length > 0 ? enquiries[0].name : '');
   
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: 'ai',
-      text: `Hello! I'm your AI Engineering Assistant. I have indexed 8 entities, 7 topological relationships, and NACE/IEC standards for ${selectedEnquiry || 'your project'}. Click a pre-generated prompt below or ask any question!`
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
@@ -2996,6 +3029,16 @@ function ObjectExplorer({ enquiries }) {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: Date.now(),
+        sender: 'ai',
+        text: `Hello! I'm your AI Engineering Assistant. I have indexed 8 entities, 7 topological relationships, and NACE/IEC standards for ${selectedEnquiry || 'your project'}. Click a pre-generated prompt below or ask any question!`
+      }
+    ]);
+  }, [selectedEnquiry]);
 
   useEffect(() => {
     scrollToBottom();
@@ -3067,14 +3110,7 @@ function ObjectExplorer({ enquiries }) {
     <div>
       <div style={{marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px'}}>
         <span style={{fontWeight: 600, fontSize: '14px', color: 'var(--text)'}}>Knowledge Graph Context:</span>
-        <select 
-          className="search-input"
-          style={{padding: '8px 12px', width: '320px', background: '#fff'}}
-          value={selectedEnquiry}
-          onChange={(e) => setSelectedEnquiry(e.target.value)}
-        >
-          {enquiries.map((enq, i) => <option key={i} value={enq.name}>{enq.name}</option>)}
-        </select>
+        <span className="badge badge-success" style={{fontSize: '13px', padding: '6px 12px'}}>{selectedEnquiry || 'No project selected'}</span>
       </div>
       <div className="grid-main-side">
       <div className="graph-canvas">
@@ -3258,7 +3294,7 @@ const boqData = [
   { item: '5.0', desc: 'Demobilization', qty: 1, unit: 'LS', rate: 12000, total: 12000 },
 ];
 
-function EstimatorWorkbench() {
+function EstimatorWorkbench({ selectedEnquiry }) {
   const materials = 75096;
   const labour = 42800;
   const logistics = 18400;
@@ -3274,7 +3310,7 @@ function EstimatorWorkbench() {
     <div className="grid-main-side-wide">
       <div className="card" style={{padding: 0}}>
         <div style={{padding: '16px 24px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <span style={{fontWeight: 600, fontSize: 14}}>Bill of Quantities</span>
+          <span style={{fontWeight: 600, fontSize: 14}}>Bill of Quantities {selectedEnquiry && `— ${selectedEnquiry}`}</span>
           <span className="meta-text">10 line items · Auto-generated from extraction</span>
         </div>
         <div className="table-wrap">
@@ -3360,7 +3396,7 @@ const revisionImpacts = [
   { change: 'Additional test post TP-010 added near relocated rectifier', qty: '+1 unit', cost: '+$380', dir: 'up' },
 ];
 
-function RevisionImpact() {
+function RevisionImpact({ selectedEnquiry }) {
   return (
     <div>
       {/* Revision header card */}
@@ -3376,7 +3412,7 @@ function RevisionImpact() {
               Rectifier REC-001 relocated 120m east within Area A plot boundary
             </div>
             <div className="meta-text">
-              Design change issued 18 Jul 2026 — Cascading impacts auto-detected across 5 BOQ line items
+              Design change issued 18 Jul 2026 — Cascading impacts auto-detected for {selectedEnquiry || 'project'} across 5 BOQ line items
             </div>
           </div>
           <div className="auto-badge">
@@ -3901,10 +3937,10 @@ function App() {
     switch (activePage) {
       case 'inbox': return <TenderInbox enquiries={enquiries} onAddEnquiryWithFiles={handleAddEnquiryWithFiles} onNav={handleNav} />;
       case 'rfq': return <RFQIngestion enquiries={enquiries} selectedEnquiry={selectedEnquiry} setSelectedEnquiry={setSelectedEnquiry} />;
-      case 'drawing': return <DrawingExtraction />;
-      case 'explorer': return <ObjectExplorer enquiries={enquiries} />;
-      case 'estimator': return <EstimatorWorkbench />;
-      case 'revision': return <RevisionImpact />;
+      case 'drawing': return <DrawingExtraction selectedEnquiry={selectedEnquiry} />;
+      case 'explorer': return <ObjectExplorer enquiries={enquiries} selectedEnquiry={selectedEnquiry} />;
+      case 'estimator': return <EstimatorWorkbench selectedEnquiry={selectedEnquiry} />;
+      case 'revision': return <RevisionImpact selectedEnquiry={selectedEnquiry} />;
       case 'dashboard': return <Dashboard />;
       case 'settings': return <SettingsPage enquiries={enquiries} onAddEnquiry={handleAddEnquiry} />;
       default: return <TenderInbox enquiries={enquiries} onAddEnquiryWithFiles={handleAddEnquiryWithFiles} onNav={handleNav} />;
