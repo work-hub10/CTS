@@ -1937,7 +1937,7 @@ function TopBar({ page, onNav, user, enquiries = [], selectedEnquiry = '', onSel
         <span className="topbar-title">{pageTitles[page]}</span>
       </div>
       <div className="topbar-center" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        {page !== 'inbox' && sortedEnquiries.length > 0 && (
+        {page !== 'inbox' && page !== 'settings' && sortedEnquiries.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '4px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               Enquiry:
