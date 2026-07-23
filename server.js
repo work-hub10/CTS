@@ -30,6 +30,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
+// Serve static frontend files from the root directory
+app.use(express.static(__dirname));
+
 // ─── MULTER (file upload, 20MB max) ──────────────
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -341,4 +344,12 @@ app.listen(PORT, () => {
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/extract`);
   console.log('═══════════════════════════════════════════════');
   console.log('');
+
+  // Automatically open browser on startup
+  const { exec } = require('child_process');
+  const url = `http://localhost:${PORT}`;
+  const startCommand = process.platform === 'win32' ? 'start' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+  exec(`${startCommand} ${url}`, (err) => {
+    if (err) console.error('Failed to auto-open browser:', err.message);
+  });
 });
